@@ -1,18 +1,35 @@
 import React, { Component } from 'react';
-import { range } from 'lodash';
+import { range, fill } from 'lodash';
 import './App.css';
 
-const Cell = () => (
-  <div className="Cell"/>
-)
+const DIM = 16;
 
+const entityMap = {
+  P: '🐭',
+  G: '🧀',
+  B: '💣',
+};
+
+const xy = (x, y) => x + y * DIM;
+
+const grid = fill(range(DIM * DIM), null);
+grid[xy(0, 4)] = 'P';
+grid[xy(15, 5)] = 'G';
+
+const Tile = ({entity}) => (
+  <div className="Tile">
+    {entity && entityMap[entity]}
+  </div>
+)
 
 class App extends Component {
   render() {
     return (
       <div className="App">
         <div className="Grid">
-          {range(16 * 16).map(i => <Cell key={i} />)}
+          {grid.map((entity, i) =>
+            <Tile key={i} entity={entity}/>)
+          }
         </div>
       </div>
     );

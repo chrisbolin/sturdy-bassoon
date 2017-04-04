@@ -1,4 +1,8 @@
 .App {
+  width: 100vw;
+  height: 100vh;
+  background-color: #fcfcfc;
+  overflow: hidden;
 }
 
 .Grid {
@@ -9,15 +13,16 @@
   width: 100vw;
 }
 
-.Cell {
-  transition: all 200ms ease-in-out;
+.Tile {
   align-content: center;
-  background-color: lightgrey;
+  background-color: rgba(0, 0, 0, 0.03);
   display: flex;
   flex-basis: 1;
-  font-size: 3em;
+  font-size: 3vw;
   justify-content: center;
   margin-bottom: 1em;
+  box-sizing: border-box;
+  line-height: 5.5vw;
   width: 5vw;
   height: 5vw;
   margin: 0.5vw;
