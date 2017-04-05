@@ -3,14 +3,15 @@
   height: 100vh;
   background-color: #fcfcfc;
   overflow: hidden;
+  display: flex;
 }
 
 .Grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 2vw;
-  width: 100vw;
+  margin: auto;
+  width: 100vmin;
 }
 
 .Tile {
@@ -18,12 +19,12 @@
   background-color: rgba(0, 0, 0, 0.03);
   display: flex;
   flex-basis: 1;
-  font-size: 3vw;
+  font-size: 3vmin;
   justify-content: center;
   margin-bottom: 1em;
   box-sizing: border-box;
-  line-height: 5.5vw;
-  width: 5vw;
-  height: 5vw;
-  margin: 0.5vw;
+  line-height: 5.5vmin;
+  width: 5vmin;
+  height: 5vmin;
+  margin: 0.5vmin;
 }
