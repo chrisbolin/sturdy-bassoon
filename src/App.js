@@ -1,39 +1,69 @@
-import React, { Component } from 'react';
-import { range, fill } from 'lodash';
+import React from 'react';
+import { contextTypes } from 'freactal';
+
+import { GRID, ENTITY_MAP, UP, DOWN, LEFT, RIGHT } from './constants';
+import addState from './state';
+import initializeCLI from './cli';
 import './App.css';
 
-const DIM = 16;
-
-const entityMap = {
-  P: '🐭',
-  G: '🧀',
-  B: '💣',
-};
-
-const xy = (x, y) => x + y * DIM;
-
-const grid = fill(range(DIM * DIM), null);
-grid[xy(0, 4)] = 'P';
-grid[xy(15, 5)] = 'G';
-
-const Tile = ({entity}) => (
+const Tile = ({entity}, {state, effects}) => (
   <div className="Tile">
-    {entity && entityMap[entity]}
+    {entity && ENTITY_MAP[entity]}
   </div>
-)
+);
 
-class App extends Component {
+const Grid = ({entity}, { state, effects }) => (
+  <div className="Grid">
+    {GRID.map((i) => {
+      let entity = null;
+      if (state.playerIndex === i) {
+        entity = 'P';
+      } else if (state.goalIndex === i) {
+        entity = 'G';
+      }
+      return <Tile key={i} entity={entity}/>;
+    })}
+  </div>
+);
+
+Grid.contextTypes = contextTypes;
+
+class App extends React.Component {
+  componentDidMount() {
+    this._handleKeyDown = this.handleKeyDown.bind(this);
+    window.addEventListener('keydown', this._handleKeyDown);
+    initializeCLI(this.context);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this._handleKeyDown);
+  }
+  handleKeyDown(event) {
+    const keyMap = {
+      // arrows
+      38: UP,
+      40: DOWN,
+      39: RIGHT,
+      37: LEFT,
+      // wsad
+      87: UP,
+      83: DOWN,
+      68: RIGHT,
+      65: LEFT,
+    };
+    const direction = keyMap[event.keyCode];
+    if (direction) {
+      this.context.effects.move(direction);
+    }
+  }
   render() {
     return (
       <div className="App">
-        <div className="Grid">
-          {grid.map((entity, i) =>
-            <Tile key={i} entity={entity}/>)
-          }
-        </div>
+        <Grid/>
       </div>
     );
   }
 }
 
-export default App;
+App.contextTypes = contextTypes;
+
+export default addState(App);
