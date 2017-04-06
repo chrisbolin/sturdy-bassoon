@@ -17,9 +17,13 @@ const Grid = ({entity}, { state, effects }) => (
     {GRID.map((i) => {
       let entity = null;
       if (state.playerIndex === i) {
-        entity = 'P';
+        entity = state.playerIcon;
       } else if (state.goalIndex === i) {
-        entity = 'G';
+        entity = 'GOAL';
+      } else if (state.enemyIndexes.includes(i)) {
+        entity = 'ENEMY';
+      } else if (state.deadEnemyIndexes.includes(i)) {
+        entity = 'DEAD_ENEMY';
       }
       return <Tile key={i} entity={entity}/>;
     })}
@@ -53,6 +57,8 @@ class App extends React.Component {
     const direction = keyMap[event.keyCode];
     if (direction) {
       this.context.effects.move(direction);
+    } else if (event.keyCode === 82) {
+      this.context.effects.reset();
     }
   }
   render() {

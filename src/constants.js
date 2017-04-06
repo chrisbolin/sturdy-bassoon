@@ -8,7 +8,9 @@ export const LEFT = [-1, 0];
 
 export const GRID = range(DIM * DIM);;
 export const ENTITY_MAP = {
-  P: '🐭',
-  G: '🧀',
-  E: '💣',
+  PLAYER: '🐭',
+  DEAD_PLAYER: '💀',
+  GOAL: '🧀',
+  ENEMY: '💣',
+  DEAD_ENEMY: '💥',
 };
