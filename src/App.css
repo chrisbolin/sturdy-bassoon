@@ -1,4 +1,6 @@
 .App {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-weight: bold;
   width: 100vw;
   height: 100vh;
   background-color: #fcfcfc;
@@ -19,12 +21,20 @@
   background-color: rgba(0, 0, 0, 0.03);
   display: flex;
   flex-basis: 1;
-  font-size: 3vmin;
+  font-size: 6vmin;
   justify-content: center;
   margin-bottom: 1em;
   box-sizing: border-box;
-  line-height: 5.5vmin;
-  width: 5vmin;
-  height: 5vmin;
-  margin: 0.5vmin;
+  line-height: 8vmin;
+  width: 8vmin;
+  height: 8vmin;
+  margin: 0.6vmin;
+}
+
+.Info {
+  position: fixed;
+}
+
+a {
+  cursor: pointer;
 }

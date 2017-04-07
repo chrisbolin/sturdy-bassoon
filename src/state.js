@@ -2,6 +2,7 @@ import { withState } from 'freactal';
 import { flow, isEqual, countBy, forOwn, intersectionWith } from 'lodash';
 
 import { DIM } from './constants';
+import Levels from './levels';
 
 const fromXY = ([x, y]) => x + y * DIM;
 
@@ -78,19 +79,24 @@ const tickDeadEnemies = (state) => {
   return { ...state, enemies, deadEnemies };
 };
 
-const tick = flow([tickEnemies, tickLiving, tickDeadEnemies]);
+const tickLevel = (state) => {
+  if (isEqual(state.player, state.goal)) {
+    const nextLevel = state.level + 1;
+    return {
+      ...state,
+      ...Levels(nextLevel),
+      maxLevel: nextLevel
+    };
+  } else {
+    return state;
+  }
+};
+
+const tick = flow([tickEnemies, tickLiving, tickDeadEnemies, tickLevel]);
 
 const getInitialState = () => ({
-  player: [0, 2],
-  goal: [15, 7],
-  enemies: [
-    [1, 10],
-    [2, 9],
-    [2, 8],
-    [3, 8],
-  ],
-  deadEnemies: [],
-  living: true,
+  maxLevel: 0,
+  ...Levels(0),
 });
 
 export default withState({
@@ -101,6 +107,8 @@ export default withState({
     enemyIndexes: ({ enemies }) => enemies.map(enemy => fromXY(enemy)),
     deadEnemyIndexes: ({ deadEnemies }) => deadEnemies.map(enemy => fromXY(enemy)),
     playerIcon: ({ living }) => living ? 'PLAYER': 'DEAD_PLAYER',
+    canLevelUp: ({ level, maxLevel}) => level < maxLevel,
+    canLevelDown: ({ level }) => level > 0,
   },
   effects: {
     move: (effects, direction, userFeedback) => state => {
@@ -108,6 +116,13 @@ export default withState({
       if (!nextPlayer) return state;
       return tick({ ...state, player: nextPlayer });
     },
-    reset: effects => state => getInitialState(),
+    changeLevel: (effects, level) => state => ({
+      ...state,
+      living: true,
+      ...Levels(level), // just reset the level-specific details
+    }),
+    reset: effects => state => (effects.changeLevel(state.level), state),
+    changeLevelUp: effects => state => (effects.changeLevel(state.level + 1), state),
+    changeLevelDown: effects => state => (effects.changeLevel(state.level - 1), state),
   },
 });

@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "no-sequences": 0
+    }
   },
   "devDependencies": {
     "react-scripts": "0.9.5"

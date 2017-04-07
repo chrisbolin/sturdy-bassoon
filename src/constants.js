@@ -1,6 +1,6 @@
 import { range } from 'lodash';
 
-export const DIM = 16;
+export const DIM = 10;
 export const UP = [0, -1];
 export const DOWN = [0, 1];
 export const RIGHT = [1, 0];

@@ -6,6 +6,23 @@ import addState from './state';
 import initializeCLI from './cli';
 import './App.css';
 
+const getGestureDirection = (firstEvent, lastEvent) => {
+  // how "straight" is the touch line? 0 === perfectly up/down/left/right; 1 === 45 degrees
+  const THRESHOLD = 0.1;
+  const [start] = firstEvent.changedTouches;
+  const [end] = lastEvent.changedTouches;
+  const dx = end.screenX - start.screenX;
+  const dy = end.screenY - start.screenY;
+  const vertical = Math.abs(dy) > Math.abs(dx);
+
+  if (Math.abs( vertical ? dx/dy : dy/dx) < THRESHOLD) {
+    if (vertical) return (dy < 0) ? UP : DOWN;
+    return (dx < 0) ? LEFT : RIGHT;
+  } else {
+    return false;
+  }
+}
+
 const Tile = ({entity}, {state, effects}) => (
   <div className="Tile">
     {entity && ENTITY_MAP[entity]}
@@ -32,14 +49,22 @@ const Grid = ({entity}, { state, effects }) => (
 
 Grid.contextTypes = contextTypes;
 
+const Info = ({entity}, { state, effects }) => (
+  <div className="Info">
+    Level {state.level}
+    {state.canLevelUp && <a onClick={effects.changeLevelUp}>⬆️</a>}
+    {state.canLevelDown && <a onClick={effects.changeLevelDown}>⬇️</a>}
+  </div>
+);
+
+Info.contextTypes = contextTypes;
+
 class App extends React.Component {
   componentDidMount() {
-    this._handleKeyDown = this.handleKeyDown.bind(this);
-    window.addEventListener('keydown', this._handleKeyDown);
+    window.addEventListener('keydown', this.handleKeyDown.bind(this));
+    window.addEventListener('touchstart', this.handleTouchStart.bind(this));
+    window.addEventListener('touchend', this.handleTouchEnd.bind(this));
     initializeCLI(this.context);
-  }
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this._handleKeyDown);
   }
   handleKeyDown(event) {
     const keyMap = {
@@ -61,10 +86,25 @@ class App extends React.Component {
       this.context.effects.reset();
     }
   }
+  handleTouchStart(event) {
+    this.touchStartEvent = event;
+  }
+  handleTouchEnd(event) {
+    const direction = getGestureDirection(this.touchStartEvent, event);
+    if (direction) {
+      this.context.effects.move(direction);
+    }
+    this.touchStartEvent = null;
+  }
+  handleTouchCancel(event) {
+    this.touchStartEvent = null;
+    console.log('canceled');
+  }
   render() {
     return (
       <div className="App">
         <Grid/>
+        <Info/>
       </div>
     );
   }
