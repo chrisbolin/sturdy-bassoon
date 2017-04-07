@@ -3,7 +3,8 @@
   font-weight: bold;
   width: 100vw;
   height: 100vh;
-  background-color: #fcfcfc;
+  background: linear-gradient(-30deg, rgba(30,87,153,1) 0%,rgba(204,195,38,1) 100%);
+  user-select: yellow;
   overflow: hidden;
   display: flex;
 }
@@ -14,6 +15,7 @@
   justify-content: center;
   margin: auto;
   width: 100vmin;
+  user-select: none;
 }
 
 .Tile {
@@ -29,10 +31,19 @@
   width: 8vmin;
   height: 8vmin;
   margin: 0.6vmin;
+  transition: 1500ms background-color cubic-bezier(.1, 1.2, 0.5, 2.7);
+}
+
+.Entity {
+  background-color: rgba(0, 0, 0, 0.005);
 }
 
 .Info {
   position: fixed;
+}
+
+.Info::selection {
+  background-color: yellow;
 }
 
 a {

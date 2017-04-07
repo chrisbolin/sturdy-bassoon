@@ -39,13 +39,13 @@ const levels = [
     ],
   },
   { // again, must make them collide
-    player: [0, 2],
+    player: [0, 1],
     goal: [9, 7],
     enemies: [
-      [1, 10],
-      [2, 9],
+      [1, 9],
       [2, 8],
-      [3, 8],
+      [2, 7],
+      [3, 7],
     ],
   },
 ];

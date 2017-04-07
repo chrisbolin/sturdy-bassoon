@@ -24,7 +24,7 @@ const getGestureDirection = (firstEvent, lastEvent) => {
 }
 
 const Tile = ({entity}, {state, effects}) => (
-  <div className="Tile">
+  <div className={`Tile ${entity ? 'Entity' : ''}`}>
     {entity && ENTITY_MAP[entity]}
   </div>
 );
