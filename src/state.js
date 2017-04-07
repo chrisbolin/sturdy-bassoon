@@ -58,7 +58,8 @@ const tickEnemies = (state) => ({
 
 const tickLiving = (state) => ({
   ...state,
-  living: state.enemies.reduce((living, enemy) => living && !isEqual(enemy, state.player), true)
+  living: state.enemies.concat(state.deadEnemies)
+    .reduce((living, enemy) => living && !isEqual(enemy, state.player), true)
 });
 
 const tickDeadEnemies = (state) => {
